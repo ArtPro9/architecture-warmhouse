@@ -1,0 +1,36 @@
+@startuml
+title Command Handler - Code Diagram
+
+class CommandHandler {
+    + handleCommand(command: Command): void
+    + validateCommand(command: Command): boolean
+    + logCommand(command: Command): void
+    + sendCommandToDevice(deviceId: String, command: Command): void
+}
+
+class Command {
+    - deviceId: String
+    - action: String
+    - parameters: Map
+}
+
+class DeviceStateManager {
+    + updateDeviceState(deviceId: String, newState: String): void
+}
+
+class ExternalDeviceInterface {
+    + sendCommandToDevice(deviceId: String, command: String): void
+}
+
+class CommandLogger {
+    + log(command: Command): void
+}
+
+CommandHandler --> Command : processes
+CommandHandler --> DeviceStateManager : interacts
+CommandHandler --> ExternalDeviceInterface : interacts
+CommandHandler --> CommandLogger : logs commands
+DeviceStateManager --> Command : responds to commands
+ExternalDeviceInterface --> Command : processes commands
+
+@enduml

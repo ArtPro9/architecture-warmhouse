@@ -1,0 +1,26 @@
+@startuml
+title ER Diagram for Warmhouse System
+
+entity "User" {
+  +id : UUID
+  username : String
+  password : String
+  email : String
+}
+
+entity "Device" {
+  +deviceId: UUID
+  name : String
+  serial_number : String
+  ownerId : UUID
+}
+
+entity "Configuration" {
+  +id : UUID
+  device_id : UUID
+  config : JSON
+}
+
+User "1" -- "0..*" Device : "Owns"
+Device "1" -- "0..*" Configuration : "Has"
+@enduml

@@ -1,35 +1,32 @@
 # Build stage
-FROM golang:1.22-alpine AS builder
+FROM openjdk:21-jdk-slim as build
 
 # Set working directory
 WORKDIR /app
 
-# Copy go.mod and go.sum files
-COPY go.mod go.sum ./
-
-# Download dependencies
-RUN go mod download
-
-# Copy the source code
+# Copy build.gradle and settings.gradle files
 COPY . .
 
+# Download dependencies
+RUN ./gradlew build --no-daemon
+
+# Copy the source code
+COPY src /app/src
+
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -o temperature-api
+RUN ./gradlew build -x test --no-daemon
 
 # Runtime stage
-FROM alpine:latest
-
-# Install necessary runtime dependencies
-RUN apk --no-cache add ca-certificates tzdata
+FROM openjdk:21-jdk-slim
 
 # Set working directory
 WORKDIR /app
 
-# Copy the binary from the builder stage
-COPY --from=builder /app/temperature-api .
+# Copy the binary from the build stage
+COPY --from=build /app/build/libs/*.jar app.jar
 
 # Expose the port the app runs on
 EXPOSE 8081
 
 # Command to run the application
-CMD ["./temperature-api"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -1,0 +1,43 @@
+@startuml
+title Device State Manager - Code Diagram
+
+class DeviceStateManager {
+    + getDeviceState(deviceId: String): DeviceState
+    + updateDeviceState(deviceId: String, newState: String): void
+    + resetDeviceState(deviceId: String): void
+}
+
+class DeviceState {
+    - deviceId: String
+    - state: String
+    - timestamp: String
+    + isStateValid(): boolean
+}
+
+class DeviceRepository {
+    + saveDeviceState(state: DeviceState): void
+    + getDeviceStateFromDb(deviceId: String): DeviceState
+}
+
+class ExternalDeviceInterface {
+    + getExternalDeviceState(deviceId: String): String
+    + sendCommandToDevice(deviceId: String, command: String): void
+}
+
+class StateChangeEvent {
+    - deviceId: String
+    - oldState: String
+    - newState: String
+    - timestamp: String
+}
+
+DeviceStateManager --> DeviceState : uses
+DeviceStateManager --> DeviceRepository : uses
+DeviceStateManager --> ExternalDeviceInterface : uses
+DeviceStateManager --> StateChangeEvent : generates
+
+DeviceRepository --> DeviceState : stores
+ExternalDeviceInterface --> DeviceState : interacts
+StateChangeEvent --> DeviceState : includes
+
+@enduml
