@@ -1,15 +1,15 @@
 @startuml
 !include https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
 
-Container(devicesService, "Управление устройствами", "Обработка операций с устройствами", "Java, Spring Boot")
-
-Component(api, "API", "Обрабатывает входящие запросы для управления устройствами, маршрутизирует команды и данные", "Spring MVC")
-Component(commandHandler, "Command Handler", "Обрабатывает команды от пользователей и направляет их на соответствующие компоненты", "Spring Boot")
-Component(deviceStateManager, "Device State Manager", "Менеджер текущего состояния устройств, отвечает за актуальные данные устройств", "Spring Boot")
-Component(eventProcessor, "Event Processor", "Обрабатывает и анализирует события, приходящие от устройств, обновляет состояние", "Spring Boot")
-Component(externalIntegration, "External Integration", "Интегрирует устройства сторонних производителей, поддерживает стандарты взаимодействия (например, MQTT, REST)", "Java, REST API")
-Component(deviceRepository, "Device Repository", "Отвечает за хранение и извлечение данных о устройствах, их состоянии и конфигурации", "JPA, Hibernate")
-Component(eventLogger, "Event Logger", "Записывает события и изменения состояния устройств в журнал для последующего анализа и отчётов", "Spring Boot")
+Container(devicesService, "Управление устройствами", "Обработка операций с устройствами", "Java, Spring Boot") {
+    Component(api, "API", "Обрабатывает входящие запросы для управления устройствами, маршрутизирует команды и данные", "Spring MVC")
+    Component(commandHandler, "Command Handler", "Обрабатывает команды от пользователей и направляет их на соответствующие компоненты", "Spring Boot")
+    Component(deviceStateManager, "Device State Manager", "Менеджер текущего состояния устройств, отвечает за актуальные данные устройств", "Spring Boot")
+    Component(eventProcessor, "Event Processor", "Обрабатывает и анализирует события, приходящие от устройств, обновляет состояние", "Spring Boot")
+    Component(externalIntegration, "External Integration", "Интегрирует устройства сторонних производителей, поддерживает стандарты взаимодействия (например, MQTT, REST)", "Java, REST API")
+    Component(deviceRepository, "Device Repository", "Отвечает за хранение и извлечение данных о устройствах, их состоянии и конфигурации", "JPA, Hibernate")
+    Component(eventLogger, "Event Logger", "Записывает события и изменения состояния устройств в журнал для последующего анализа и отчётов", "Spring Boot")
+}
 ComponentDb(deviceDatabase, "Device Database", "Хранит данные об устройствах", "PostgreSQL")
 
 Rel(api, commandHandler, "Отправляет команды на обработку")

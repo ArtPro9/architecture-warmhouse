@@ -11,11 +11,14 @@ Container(messageQueue, "Очереди сообщений", "Асинхронн
 
 ContainerDb(database, "PostgreSQL", "Хранение данных о пользователях, устройствах и настройках", "PostgreSQL")
 
+System_Ext(externalDevice, "External Device", "Внешнее устройство")
+
 Rel(system, devicesService, "Использует для управления всеми устройствами")
 Rel(system, userService, "Использует для управления пользователями")
 Rel(devicesService, messageQueue, "Отправляет события в очередь сообщений")
 Rel(userService, messageQueue, "Отправляет уведомления в очередь сообщений")
 Rel(devicesService, database, "Читает и записывает данные о устройствах")
 Rel(userService, database, "Читает и записывает данные о пользователях")
+Rel(externalDevice, messageQueue, "Отправляет данные устройства в очередь сообщений")
 
 @enduml
