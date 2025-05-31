@@ -1,0 +1,14 @@
+@startuml
+title Warmhouse Context Diagram
+
+!include https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Context.puml
+
+Person(user, "Пользователь", "Управляет устройствами, настраивает взаимодействие")
+System_Ext(thirdPartySystem, "Система сторонних устройств", "Предоставляет API для интеграции")
+
+System(system, "Теплый Дом", "Система управления умными устройствами для пользователей.")
+
+Rel(user, system, "Использует для управления устройствами и настройки")
+Rel( system, thirdPartySystem,"Интегрируется с внешними устройствами")
+
+@enduml

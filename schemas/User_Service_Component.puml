@@ -1,0 +1,15 @@
+@startuml
+!include https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Container(userService, "Управление пользователями", "Регистрация, авторизация, настройки пользователей", "Java, Spring Boot") {
+    Component(userApi, "API", "Обрабатывает запросы для регистрации и авторизации пользователей", "Spring MVC")
+    Component(authManager, "Auth Manager", "Отвечает за проверку подлинности пользователей", "Spring Boot")
+    Component(userSettings, "User Settings Manager", "Управляет настройками пользователей", "Spring Boot")
+}
+ComponentDb(userDatabase, "User Database", "Хранит данные о пользователях и их настройках", "PostgreSQL")
+
+Rel(userApi, authManager, "Отправляет данные для проверки авторизации")
+Rel(authManager, userSettings, "Предоставляет настройки после успешной авторизации")
+Rel(userSettings, userDatabase, "Записывает и читает настройки пользователей")
+
+@enduml

@@ -1,0 +1,140 @@
+asyncapi: '2.0.0'
+info:
+  title: Warmhouse Device Management API
+  description: API для управления устройствами, их конфигурациями и пользователями
+  version: '1.0.0'
+  contact:
+    name: Warmhouse Team
+    url: https://warmhouse.example.com
+    email: support@warmhouse.example.com
+
+servers:
+  production:
+    url: 'kafka://message-queue:9092'
+    description: Основной сервер Kafka для сообщений
+    protocol: Kafka
+
+channels:
+  userCreated:
+    description: Канал для создания нового пользователя
+    bindings:
+      kafka:
+        topic: user_created
+    parameters:
+      userId:
+        description: Идентификатор пользователя
+        schema:
+          type: string
+          format: uuid
+    subscribe:
+      operationId: onUserCreated
+      summary: "Получение уведомления о создании пользователя"
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            userId:
+              type: string
+              format: uuid
+            username:
+              type: string
+            email:
+              type: string
+
+  deviceCreated:
+    description: Канал для создания нового устройства
+    bindings:
+      kafka:
+        topic: device_created
+    parameters:
+      deviceId:
+        description: Идентификатор устройства
+        schema:
+          type: string
+          format: uuid
+    subscribe:
+      operationId: onDeviceCreated
+      summary: "Получение уведомления о создании устройства"
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            deviceId:
+              type: string
+              format: uuid
+            name:
+              type: string
+            serial_number:
+              type: string
+            ownerId:
+              type: string
+              format: uuid
+
+  deviceConfigured:
+    description: Канал для уведомлений о новых конфигурациях устройств
+    bindings:
+      kafka:
+        topic: device_configured
+    parameters:
+      deviceId:
+        description: Идентификатор устройства
+        schema:
+          type: string
+          format: uuid
+    subscribe:
+      operationId: onDeviceConfigured
+      summary: "Получение уведомления о новой конфигурации устройства"
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            deviceId:
+              type: string
+              format: uuid
+            config:
+              type: object
+              description: Конфигурация устройства в формате JSON
+
+components:
+  messages:
+    UserCreated:
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          userId:
+            type: string
+            format: uuid
+          username:
+            type: string
+          email:
+            type: string
+    DeviceCreated:
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          deviceId:
+            type: string
+            format: uuid
+          name:
+            type: string
+          serial_number:
+            type: string
+          ownerId:
+            type: string
+            format: uuid
+    DeviceConfigured:
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          deviceId:
+            type: string
+            format: uuid
+          config:
+            type: object
+            description: Конфигурация устройства в формате JSON

@@ -1,0 +1,24 @@
+@startuml
+title Warmhouse Container Diagram
+
+!include https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+System(system, "Тёплый Дом", "Система управления умными устройствами для пользователей")
+
+Container(devicesService, "Управление устройствами", "Обработка операций с устройствами (подключение, мониторинг, автоматизация, интеграция с внешними устройствами)", "Java, Spring Boot")
+Container(userService, "Управление пользователями", "Регистрация, авторизация, настройки пользователей", "Java, Spring Boot")
+Container(messageQueue, "Очереди сообщений", "Асинхронная обработка событий и сообщений", "Kafka/RabbitMQ")
+
+ContainerDb(database, "PostgreSQL", "Хранение данных о пользователях, устройствах и настройках", "PostgreSQL")
+
+System_Ext(externalDevice, "External Device", "Внешнее устройство")
+
+Rel(system, devicesService, "Использует для управления всеми устройствами")
+Rel(system, userService, "Использует для управления пользователями")
+Rel(devicesService, messageQueue, "Отправляет события в очередь сообщений")
+Rel(userService, messageQueue, "Отправляет уведомления в очередь сообщений")
+Rel(devicesService, database, "Читает и записывает данные о устройствах")
+Rel(userService, database, "Читает и записывает данные о пользователях")
+Rel(externalDevice, messageQueue, "Отправляет данные устройства в очередь сообщений")
+
+@enduml
